@@ -1,7 +1,7 @@
 package com.arik.expcalc;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.View;
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean isFunction(char ch) {
+        if (ch == '-') return true;
         for (AppCompatButton abtn : fun_btns) {
             if (abtn.getText().equals(ch + "")) {
                 return true;
@@ -117,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     switch (v.getId()) {
-                        case R.id.button_plusminus:
-                            numbox.append("−");
-                            break;
                         case R.id.button_dot:
                             if (numbox.length() > 0 && numbox.getText().charAt(numbox.length() - 1) == ')') {
                                 return;
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
                             for (int i = numbox.length() - 1; i > -1; i--) {
                                 char cch = numbox.getText().charAt(i);
-                                if (cch == '−' || isFunction(cch) || isOperator(cch)) {
+                                if (isFunction(cch) || isOperator(cch)) {
                                     break;
                                 }
                                 if (cch == '.') {
@@ -145,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
                             if (numbox.length() > 0 && numbox.getText().charAt(numbox.length() - 1) == ')' && !Arrays.asList(op_btns).contains(v)) {
                                 return;
                             }
-                            numbox.append(((AppCompatButton) v).getText());
+                            if (v.getId() == R.id.button_plusminus) {
+                                numbox.append("-");
+                            } else {
+                                numbox.append(((AppCompatButton) v).getText());
+                            }
                             break;
                     }
                 }
@@ -239,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                 case '÷':
                 case '×':
                     return 4;
-                case '-':
+                case '−':
                 case '+':
                     return 2;
                 default:
@@ -299,21 +301,21 @@ public class MainActivity extends AppCompatActivity {
     }
 /*
     private int charType(char ch) {
-        if (isFunction(ch) || ch == ')' || ch == '−') {
+        if (isFunction(ch) || ch == ')' || ch == '-') {
             return 0;
         } else if (isOperator(ch)) {
             return 1;
         } else if (isNumber(ch)) {
             return 2;
         }
-        return -1;
+        return −1;
     }*/
 
     private String operate(char operator, String operand1, String operand2) {
         switch (operator) {
             case '+':
                 return doubleToString(Double.valueOf(operand1) + Double.valueOf(operand2));
-            case '-':
+            case '−':
                 return doubleToString(Double.valueOf(operand1) - Double.valueOf(operand2));
             case '÷':
                 return doubleToString(Double.valueOf(operand1) / Double.valueOf(operand2));
@@ -335,7 +337,8 @@ public class MainActivity extends AppCompatActivity {
                 return doubleToString(Math.sqrt(Double.valueOf(param)));
             case '∛':
                 return doubleToString(Math.cbrt(Double.valueOf(param)));
-            case '−':
+            case '-':
+                System.out.println("FUCK HERE------------" + func + " " + param);
                 return doubleToString(-Double.valueOf(param));
         }
         return null;

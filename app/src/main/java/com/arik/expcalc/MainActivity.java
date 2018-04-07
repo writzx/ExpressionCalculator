@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatButton[] fun_btns;
     private AppCompatButton[] num_btns;
 
+    private boolean dirty = false;
+
     private int countChars(String s, char ch) {
         int counter = 0;
         for (int i = 0; i < s.length(); i++) {
@@ -100,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (dirty) {
+                        numbox.getText().clear();
+                        dirty = false;
+                    }
                     int pend_brack = countChars(numbox.getText().toString(), '(') - countChars(numbox.getText().toString(), ')');
                     boolean last_fun = false, last_op = false, last_num = false, last_dot = false;
                     if (numbox.length() > 0) {
@@ -171,9 +177,11 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 assert rs != null;
                                 result = calculate(rs);
-                                Toast.makeText(MainActivity.this, "Result: " + result, Toast.LENGTH_LONG).show();
+                                numbox.setText(result);
+                                dirty = true;
+                                // Toast.makeText(MainActivity.this, "Result: " + result, Toast.LENGTH_LONG).show();
                             } catch (Exception ex) {
-                                Toast.makeText(MainActivity.this, "Error calculating the equation!\nThis generally happens when one of the values is out of range of double.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Error calculating the equation!\nThis generally happens when any of the values is invalid or is out of range.", Toast.LENGTH_LONG).show();
                                 ex.printStackTrace();
                             }
                             break;
@@ -338,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
             case '∛':
                 return doubleToString(Math.cbrt(Double.valueOf(param)));
             case '-':
-                System.out.println("FUCK HERE------------" + func + " " + param);
                 return doubleToString(-Double.valueOf(param));
         }
         return null;

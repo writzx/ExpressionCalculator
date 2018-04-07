@@ -18,7 +18,7 @@
     <string name="division">÷</string>
     <string name="backspace">DEL</string>
     <string name="clear">AC</string>
-    <string name="num_hint">enter number here…</string>
+    <string name="num_hint">enter expression here…</string>
     <string name="lbracket">(</string>
     <string name="rbracket">)</string>
     <string name="ac">ac</string>
